@@ -26,24 +26,20 @@ export function handleScrollHeader(callback) {
     let beforeScrollTop = window.pageYOffset
     callback = callback || function () {
     }
-    window.addEventListener(
-        'scroll',
-        event => {
-            clearTimeout(timer)
-            timer = setTimeout(() => {
-                let direction = 'up'
-                const afterScrollTop = window.pageYOffset
-                const delta = afterScrollTop - beforeScrollTop
-                if (delta === 0) {
-                    return false
-                }
-                direction = delta > 0 ? 'down' : 'up'
-                callback(direction)
-                beforeScrollTop = afterScrollTop
-            }, 50)
-        },
-        false
-    )
+    window.addEventListener('scroll', event => {
+        clearTimeout(timer)
+        timer = setTimeout(() => {
+            let direction = 'up'
+            const afterScrollTop = window.pageYOffset
+            const delta = afterScrollTop - beforeScrollTop
+            if (delta === 0) {
+                return false
+            }
+            direction = delta > 0 ? 'down' : 'up'
+            callback(direction)
+            beforeScrollTop = afterScrollTop
+        }, 50)
+    }, false)
 }
 
 export function isIE() {
@@ -81,10 +77,7 @@ export function scorePassword(pass) {
 
     // bonus points for mixing it up
     const variations = {
-        digits: /\d/.test(pass),
-        lower: /[a-z]/.test(pass),
-        upper: /[A-Z]/.test(pass),
-        nonWords: /\W/.test(pass)
+        digits: /\d/.test(pass), lower: /[a-z]/.test(pass), upper: /[A-Z]/.test(pass), nonWords: /\W/.test(pass)
     }
 
     let variationCount = 0
@@ -101,9 +94,21 @@ export function scorePassword(pass) {
  * @param parameter
  * @returns {{current: (number|*), size}}
  */
-export function getPageParam(parameter) {
+export const getPageParam = (parameter) => {
     return {
-        size: parameter.pageSize,
-        current: parameter.pageNo
+        size: parameter.pageSize, current: parameter.current
+    }
+}
+
+/**
+ * 获取分页的结果
+ * @param result
+ * @returns {*&{pageNo, totalCount}}
+ */
+export function getPageResult(result) {
+    const {current, size, total} = result;
+
+    if (current && total) {
+        return {pageNo: current, totalCount: total, ...result}
     }
 }

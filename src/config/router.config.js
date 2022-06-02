@@ -286,6 +286,16 @@ export const asyncRouterMap = [
               keepAlive: true,
               permission: ['user']
             }
+          },
+          {
+            path: '/system/manger/module',
+            name: 'moduleManger',
+            component: () => import('@/views/system/module/Index'),
+            meta: {
+              title: 'menu.system.manger.module.title',
+              keepAlive: true,
+              permission: ['user']
+            }
           }
         ]
       }

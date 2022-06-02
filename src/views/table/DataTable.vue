@@ -4,12 +4,11 @@
       size="default"
       rowKey="key"
       :columns="columns"
-      :dataSource="result.data"
+      :dataSource="result.records"
       :loading="loading"
       :pagination="pageParam"
-  >
-
-  </a-table>
+      :customRow="customRow"
+  />
 </template>
 
 <script>
@@ -19,12 +18,13 @@ export default {
   name: "DataTable",
   props: [
     "columns",
-    "dataAction"
+    "dataAction",
+    "customRow"
   ],
   data() {
     return {
       result: {
-        data: []
+        records: []
       },
       loading: false,
       pageParam: {
@@ -41,8 +41,14 @@ export default {
     loadData(param) {
       this.loading = true;
       this.dataAction(getPageParam(param)).then(res => {
+        const {current, total, records} = res.data;
+        this.pageParam.current = current;
+        this.pageParam.total = total;
+        this.result.records = records;
         this.loading = false;
-      })
+      }).catch(reason => {
+        this.loading = false;
+      });
     }
   }
 }

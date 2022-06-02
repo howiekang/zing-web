@@ -9,6 +9,8 @@ import dashboard from './zh-CN/dashboard'
 import form from './zh-CN/form'
 import result from './zh-CN/result'
 import account from './zh-CN/account'
+import systemUser from './zh-CN/system/user'
+import systemModule from './zh-CN/system/module'
 
 const components = {
   antLocale: antd,
@@ -30,5 +32,7 @@ export default {
   ...dashboard,
   ...form,
   ...result,
-  ...account
+  ...account,
+  ...systemUser,
+  ...systemModule
 }

@@ -873,6 +873,17 @@ const userNav = options => {
         show: true
       },
       component: 'SystemUserManger'
+    },
+    {
+      name: 'SystemModuleManger',
+      path: '/system/manger/module',
+      parentId: 10045,
+      id: 10047,
+      meta: {
+        title: '模块管理',
+        show: true
+      },
+      component: 'SystemModuleManger'
     }
   ]
   const json = builder(nav)

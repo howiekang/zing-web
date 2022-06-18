@@ -8,7 +8,15 @@
       :loading="loading"
       :pagination="pageParam"
       :customRow="customRow"
-  />
+      :customCell="customCell"
+  >
+    <template
+        v-for="column in columns"
+        :slot="column.scopedSlots?column.scopedSlots.customRender:''"
+        slot-scope="text,record">
+      <slot :name="column.scopedSlots?column.scopedSlots.customRender:''" v-bind:scope="record"></slot>
+    </template>
+  </a-table>
 </template>
 
 <script>
@@ -19,7 +27,8 @@ export default {
   props: [
     "columns",
     "dataAction",
-    "customRow"
+    "customRow",
+    "customCell"
   ],
   data() {
     return {

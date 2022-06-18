@@ -5,10 +5,7 @@ import notification from 'ant-design-vue/es/notification'
 import {VueAxios} from './axios'
 import {ACCESS_TOKEN} from '@/store/mutation-types'
 import {message} from "ant-design-vue";
-
-const resultCode = {
-    success: 200,
-}
+import {boolean} from "mockjs2/src/mock/random/basic";
 
 // 创建 axios 实例
 const request = axios.create({
@@ -59,16 +56,7 @@ request.interceptors.request.use(config => {
 
 // response interceptor
 request.interceptors.response.use((response) => {
-    const {code, data, msg} = response.data;
-    if (code !== resultCode.success) {
-      if (data){
-        message.warn(data);
-      }
-      if (msg){
-        message.error(msg);
-      }
-    }
-    return response.data
+    return responseProcess(response);
 }, errorHandler)
 
 const installer = {
@@ -83,4 +71,73 @@ export default request
 export {
     installer as VueAxios,
     request as axios
+}
+
+/**
+ * 系统的请求状态
+ * @type {{success: number}}
+ */
+const RESULT_CODE = {
+    success: 200,
+}
+
+/**
+ * 公共api路径
+ * @type {{enable: string, disable: string, get: string, create: string, page: string, delete: string}}
+ */
+export const PUBLIC_API_PATH = {
+    create: "/create",
+    page: "/page",
+    get: "/get",
+    delete: "/delete",
+    enable: "/enable",
+    disable: "/disable"
+}
+
+/**
+ * 响应的内容处理
+ * @param response 响应信息
+ * @returns {*}
+ */
+function responseProcess(response) {
+    const {code, msg} = response.data;
+    if (code && msg) {
+        if (code !== RESULT_CODE.success) {
+            message.error(msg);
+        }
+    }
+
+    return response.data;
+}
+
+/**
+ * 响应结果展示
+ * @param reqAction
+ */
+export function showMsg(reqAction) {
+    reqAction.then(resp => {
+        const {code, data, msg} = resp;
+        if (code !== RESULT_CODE.success) {
+            return;
+        }
+
+        if (data && data instanceof boolean) {
+            if (msg) {
+                message.info(msg);
+                return;
+            }
+
+            if (data) {
+                message.info("成功");
+            } else {
+                message.warning("失败");
+            }
+            return;
+        }
+        if (msg) {
+            message.info(msg);
+        }
+    }).catch(err => {
+        message.error(err);
+    });
 }

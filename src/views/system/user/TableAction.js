@@ -23,7 +23,7 @@ export const columns = [
     {
         title: "状态",
         dataIndex: 'status',
-        scopedSlots: {customRender: 'badge'}
+        scopedSlots: {customRender: 'status'}
     },
     {
         title: "注册时间",

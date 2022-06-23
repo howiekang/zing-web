@@ -296,6 +296,16 @@ export const asyncRouterMap = [
               keepAlive: true,
               permission: ['user']
             }
+          },
+          {
+            path: '/system/manger/role',
+            name: 'roleManger',
+            component: () => import('@/views/system/role/Index'),
+            meta: {
+              title: 'menu.system.manger.role.title',
+              keepAlive: true,
+              permission: ['user']
+            }
           }
         ]
       }

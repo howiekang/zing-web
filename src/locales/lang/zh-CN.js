@@ -11,6 +11,7 @@ import result from './zh-CN/result'
 import account from './zh-CN/account'
 import systemUser from './zh-CN/system/user'
 import systemModule from './zh-CN/system/module'
+import systemRole from './zh-CN/system/role'
 
 const components = {
   antLocale: antd,
@@ -34,5 +35,6 @@ export default {
   ...result,
   ...account,
   ...systemUser,
-  ...systemModule
+  ...systemModule,
+  ...systemRole
 }

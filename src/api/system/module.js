@@ -1,9 +1,13 @@
 import request, {PUBLIC_API_PATH} from "@/utils/request";
 
+const MODULE_NAME = "module";
+
 const api = {
-    createModule: '/module' + PUBLIC_API_PATH.create,
-    removeModule: '/module' + PUBLIC_API_PATH.delete,
-    getModuleList: '/module' + PUBLIC_API_PATH.page
+    update: '/' + MODULE_NAME + PUBLIC_API_PATH.update,
+    create: '/' + MODULE_NAME + PUBLIC_API_PATH.create,
+    remove: '/' + MODULE_NAME + PUBLIC_API_PATH.delete,
+    get: '/' + MODULE_NAME + PUBLIC_API_PATH.get,
+    getModuleList: '/' + MODULE_NAME + PUBLIC_API_PATH.page
 }
 
 /**
@@ -13,12 +17,25 @@ const api = {
  */
 export function createModule(parameter) {
     return request({
-        url: api.createModule,
+        url: api.create,
         method: 'post',
         data: parameter,
         headers: {
             'Content-Type': 'application/json;charset=UTF-8'
         }
+    })
+}
+
+/**
+ * 获取模块
+ * @param parameter
+ * @returns {*}
+ */
+export function getModule(parameter) {
+    return request({
+        url: api.get,
+        method: 'get',
+        params: {id: parameter}
     })
 }
 
@@ -45,8 +62,21 @@ export function getModuleList(parameter) {
  */
 export function removeModule(parameter) {
     return request({
-        url: api.removeModule,
+        url: api.remove,
         method: 'post',
-        data: {id: parameter}
+        params: {id: parameter}
+    })
+}
+
+/**
+ * 更新模块
+ * @param parameter
+ * @returns {*}
+ */
+export function updateModule(parameter) {
+    return request({
+        url: api.update,
+        method: 'post',
+        data: parameter
     })
 }

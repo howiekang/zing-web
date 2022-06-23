@@ -91,7 +91,8 @@ export const PUBLIC_API_PATH = {
     get: "/get",
     delete: "/delete",
     enable: "/enable",
-    disable: "/disable"
+    disable: "/disable",
+    update: "/update",
 }
 
 /**
@@ -106,7 +107,6 @@ function responseProcess(response) {
             message.error(msg);
         }
     }
-
     return response.data;
 }
 
@@ -139,5 +139,17 @@ export function showMsg(reqAction) {
         }
     }).catch(err => {
         message.error(err);
+    });
+}
+
+/**
+ * 获取返回的Data
+ * @param reqAction
+ * @returns {Promise<*>}
+ */
+export async function convertResponse(reqAction) {
+    return await reqAction.then(resp => {
+        console.log("data resp",resp.data)
+        return resp.data;
     });
 }

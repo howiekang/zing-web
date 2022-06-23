@@ -1,7 +1,8 @@
-import {createModule} from "@/api/system/module";
+import {createModule, updateModule} from "@/api/system/module";
 import {showMsg} from "@/utils/request";
 
 export const formState = {
+    id: ["id", {}],
     name: [
         "name",
         {
@@ -17,7 +18,8 @@ export const formState = {
                 }
             ]
         }
-    ], path: [
+    ],
+    path: [
         "path",
         {
             rules: [
@@ -32,10 +34,11 @@ export const formState = {
                 }
             ]
         }
-    ], status: [
+    ],
+    status: [
         "status",
         {
-            initialValue:true
+            initialValue: true
         }
     ]
 }
@@ -43,11 +46,19 @@ export const formState = {
 /**
  * 表达的保存
  * @param form 表单对象
+ * @param bindFuncList
  */
-export function saveForm(form) {
+export function saveForm(form, bindFuncList) {
     form.validateFields((err, values) => {
-        if(!err){
-            showMsg(createModule(values))
+        if (!err) {
+            values.funcIds = bindFuncList;
+            const {id} = values;
+            if (id) {
+                showMsg(updateModule(values));
+                return;
+            }
+            showMsg(createModule(values));
+
         }
     });
 }

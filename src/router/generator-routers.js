@@ -52,8 +52,8 @@ const constantRouterComponents = {
   BindingSettings: () => import('@/views/account/settings/Binding'),
   NotificationSettings: () => import('@/views/account/settings/Notification'),
   SystemUserManger: () => import('@/views/system/user/Index'),
-  SystemModuleManger: () => import('@/views/system/module/Index')
-
+  SystemModuleManger: () => import('@/views/system/module/Index'),
+  SystemRoleManger: () => import('@/views/system/role/Index')
   // 'TestWork': () => import(/* webpackChunkName: "TestWork" */ '@/views/dashboard/TestWork')
 }
 

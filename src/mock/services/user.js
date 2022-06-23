@@ -884,6 +884,17 @@ const userNav = options => {
         show: true
       },
       component: 'SystemModuleManger'
+    },
+    {
+      name: 'SystemRoleManger',
+      path: '/system/manger/role',
+      parentId: 10045,
+      id: 10048,
+      meta: {
+        title: '角色管理',
+        show: true
+      },
+      component: 'SystemRoleManger'
     }
   ]
   const json = builder(nav)

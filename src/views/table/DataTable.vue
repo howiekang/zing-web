@@ -2,11 +2,23 @@
   <a-table
       ref="table"
       size="default"
-      rowKey="key"
       :columns="columns"
       :dataSource="result.records"
       :loading="loading"
-      :pagination="pageParam"
+      :pagination="{
+        current: pageParam.current,
+        total:pageParam.total,
+        pageSize: pageParam.pageSize,
+        onChange:(page, pageSize)=>{
+          this.pageParam.current = page;
+          this.pageParam.pageSize = pageSize;
+          this.loadData(this.pageParam);
+        },
+        onShowSizeChange: (pageSize)=>{
+          this.pageParam.pageSize = pageSize;
+          this.loadData(this.pageParam);
+        }
+      }"
       :customRow="customRow"
       :customCell="customCell"
   >
@@ -14,7 +26,7 @@
         v-for="column in columns"
         :slot="column.scopedSlots?column.scopedSlots.customRender:''"
         slot-scope="text,record">
-      <slot :name="column.scopedSlots?column.scopedSlots.customRender:''" v-bind:scope="record"></slot>
+      <slot :name="column.scopedSlots?column.scopedSlots.customRender:''" :text="text" :record="record"></slot>
     </template>
   </a-table>
 </template>
@@ -38,8 +50,7 @@ export default {
       loading: false,
       pageParam: {
         current: 1,
-        defaultCurrent: 1,
-        pageSize: 10
+        pageSize: 10,
       }
     }
   },
@@ -50,9 +61,10 @@ export default {
     loadData(param) {
       this.loading = true;
       this.dataAction(getPageParam(param)).then(res => {
-        const {current, total, records} = res.data;
+        const {current, total, size, records} = res.data;
         this.pageParam.current = current;
         this.pageParam.total = total;
+        this.pageParam.pageSize = size;
         this.result.records = records;
         this.loading = false;
       }).catch(reason => {

@@ -7,17 +7,34 @@
     </div>
     <a-tabs default-active-key="1" size="small" :style="{marginTop:4}">
       <a-tab-pane key="1" tab="模块">
-        <div style="margin: 0 8px">
-          <span>模块管理</span>
-          <br />
-          <a-space>
-            <a-checkable-tag :checked="true">添加</a-checkable-tag>
-            <a-checkable-tag>添加</a-checkable-tag>
-          </a-space>
-        </div>
+        <template v-for="i in 20">
+          <div class="content-body">
+            <div style="margin-top: 8px">
+              <a-divider type="vertical"/><span style="font-size: 16px;">模块管理</span>
+            </div>
+            <div>
+              <template v-for="i in 20">
+                <a-tag closable>添加{{ i }}</a-tag>
+              </template>
+            </div>
+          </div>
+        </template>
       </a-tab-pane>
       <a-tab-pane key="2" tab="API" force-render>
-        Content of Tab Pane 2
+        <div class="content-body">
+          <div>
+            <a-divider type="vertical"/><span style="font-size: 16px;">获取用户</span>
+          </div>
+          <div style="margin-top: 8px">
+            <span>路径: https://localhost:33/api/list</span>
+          </div>
+          <div>
+            权限:
+            <template v-for="i in 5">
+              <a-tag closable>读写{{ i }}</a-tag>
+            </template>
+          </div>
+        </div>
       </a-tab-pane>
     </a-tabs>
   </a-drawer>
@@ -55,6 +72,16 @@ export default {
   margin-top: 8px;
 }
 
+/deep/ .ant-tag {
+  margin-top: 8px;
+}
+
+/deep/ .ant-divider, .ant-divider-vertical{
+  width: 4px;
+  background-color: #00A0E9;
+  margin: 0 8px 0 0;
+}
+
 .role-title {
   font-size: 32px;
   color: white;
@@ -62,8 +89,7 @@ export default {
   text-align: center;
 }
 
-.role-desc {
-  padding: 4px 0;
-  background-color: #e8e8e8;
+.content-body{
+  margin: 0 8px 8px;
 }
 </style>

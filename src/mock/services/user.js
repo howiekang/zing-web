@@ -898,7 +898,6 @@ const userNav = options => {
     }
   ]
   const json = builder(nav)
-  console.log('json', json)
   return json
 }
 

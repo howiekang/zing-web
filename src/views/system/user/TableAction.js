@@ -28,16 +28,5 @@ export const columns = [
     {
         title: "注册时间",
         dataIndex: 'regTime'
-    },
-    {
-        fixed: "right",
-        align: 'center',
-        scopedSlots: {
-            customRender: 'action',
-            title: 'table-action-title'
-        }
     }
 ]
-
-
-

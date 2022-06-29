@@ -1,20 +1,21 @@
 import request, {PUBLIC_API_PATH} from "@/utils/request";
 
 const api = {
-    update: '/role' + PUBLIC_API_PATH.update,
-    create: '/role' + PUBLIC_API_PATH.create,
-    remove: '/role' + PUBLIC_API_PATH.delete,
-    info: '/role' + PUBLIC_API_PATH.info,
-    page: '/role' + PUBLIC_API_PATH.page,
-    rolePermits: '/role/permits'
+    update: '/api' + PUBLIC_API_PATH.update,
+    create: '/api' + PUBLIC_API_PATH.create,
+    remove: '/api' + PUBLIC_API_PATH.delete,
+    info: '/api' + PUBLIC_API_PATH.info,
+    page: '/api' + PUBLIC_API_PATH.page,
+    apiPermits: '/api/permits',
+    apiPermitsType: '/api/permits/type'
 }
 
 /**
- * 创建角色信息
+ * 创建api信息
  * @param parameter
  * @returns {*}
  */
-export function createRole(parameter) {
+export function createApi(parameter) {
     return request({
         url: api.create,
         method: 'post',
@@ -26,11 +27,11 @@ export function createRole(parameter) {
 }
 
 /**
- * 获取角色
+ * 获取api
  * @param parameter
  * @returns {*}
  */
-export function getRole(parameter) {
+export function getApi(parameter) {
     return request({
         url: api.info,
         method: 'get',
@@ -39,11 +40,11 @@ export function getRole(parameter) {
 }
 
 /**
- * 角色分页查询
+ * api分页查询
  * @param parameter
  * @returns {*}
  */
-export function rolePage(parameter) {
+export function apiPage(parameter) {
     return request({
         url: api.page,
         method: 'post',
@@ -55,11 +56,11 @@ export function rolePage(parameter) {
 }
 
 /**
- * 删除角色
+ * 删除api
  * @param parameter
  * @returns {*}
  */
-export function removeRole(parameter) {
+export function removeApi(parameter) {
     return request({
         url: api.remove,
         method: 'post',
@@ -68,11 +69,11 @@ export function removeRole(parameter) {
 }
 
 /**
- * 更新角色
+ * 更新api
  * @param parameter
  * @returns {*}
  */
-export function updateRole(parameter) {
+export function updateApi(parameter) {
     return request({
         url: api.update,
         method: 'post',
@@ -81,14 +82,23 @@ export function updateRole(parameter) {
 }
 
 /**
- * 获取角色的权限
- * @param roleId
+ * 获取全部的api权限类型
  * @returns {*}
  */
-export function getRolePermits(roleId){
+export function getApiPermits() {
     return request({
-        url: api.rolePermits,
-        method: 'get',
-        params: {roleId}
+        url: api.apiPermits,
+        method: 'get'
+    })
+}
+
+/**
+ * 获取全部的api权限类型
+ * @returns {*}
+ */
+export function getApiPermitsType() {
+    return request({
+        url: api.apiPermitsType,
+        method: 'get'
     })
 }

@@ -2,6 +2,7 @@
 import * as loginService from '@/api/login'
 // eslint-disable-next-line
 import { BasicLayout, BlankLayout, PageView, RouteView } from '@/layouts'
+import {getMenuList} from "@/api/system/module";
 
 // 前端路由表
 const constantRouterComponents = {
@@ -53,7 +54,8 @@ const constantRouterComponents = {
   NotificationSettings: () => import('@/views/account/settings/Notification'),
   SystemUserManger: () => import('@/views/system/user/Index'),
   SystemModuleManger: () => import('@/views/system/module/Index'),
-  SystemRoleManger: () => import('@/views/system/role/Index')
+  SystemRoleManger: () => import('@/views/system/role/Index'),
+  SystemApiManger: () => import('@/views/system/api/Index')
   // 'TestWork': () => import(/* webpackChunkName: "TestWork" */ '@/views/dashboard/TestWork')
 }
 
@@ -84,26 +86,46 @@ const rootRouter = {
  */
 export const generatorDynamicRouter = token => {
   return new Promise((resolve, reject) => {
-    loginService
-      .getCurrentUserNav(token)
-      .then(res => {
-        console.log('generatorDynamicRouter response:', res)
-        const { result } = res
-        const menuNav = []
-        const childrenNav = []
-        //      后端数据, 根级树数组,  根级 PID
-        listToTree(result, childrenNav, 0)
-        rootRouter.children = childrenNav
-        menuNav.push(rootRouter)
-        console.log('menuNav', menuNav)
-        const routers = generator(menuNav)
-        routers.push(notFoundRouter)
-        console.log('routers', routers)
-        resolve(routers)
-      })
-      .catch(err => {
-        reject(err)
-      })
+    getMenuList()
+        .then(res=>{
+          const {data} = res;
+          let result = [];
+          for (let item of data){
+            const {extendData} = item;
+            if (extendData){
+              console.log("extendData",extendData)
+              let extendDataJson = JSON.parse(extendData);
+              console.log("component",extendDataJson)
+              result.push({
+                name:extendDataJson.component,
+                path:item.path,
+                parentId:item.parentId,
+                id:item.id,
+                meta:{
+                  title:item.name,
+                  show:true
+                },
+                component:extendDataJson.component
+              })
+            }
+          }
+          console.log("result",result)
+          console.log('generatorDynamicRouter response:', res)
+          const menuNav = []
+          const childrenNav = []
+          //      后端数据, 根级树数组,  根级 PID
+          listToTree(result, childrenNav, 0)
+          rootRouter.children = childrenNav
+          menuNav.push(rootRouter)
+          console.log('menuNav', menuNav)
+          const routers = generator(menuNav)
+          routers.push(notFoundRouter)
+          console.log('routers', routers)
+          resolve(routers)
+        })
+        .catch(err => {
+          reject(err)
+        })
   })
 }
 
@@ -168,7 +190,7 @@ export const generator = (routerMap, parent) => {
 const listToTree = (list, tree, parentId) => {
   list.forEach(item => {
     // 判断是否为父级菜单
-    if (item.parentId === parentId) {
+    if (item.parentId == parentId) {
       const child = {
         ...item,
         key: item.key || item.name,

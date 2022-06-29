@@ -895,6 +895,17 @@ const userNav = options => {
         show: true
       },
       component: 'SystemRoleManger'
+    },
+    {
+      name: 'SystemApiManger',
+      path: '/system/manger/api',
+      parentId: 10045,
+      id: 10049,
+      meta: {
+        title: 'Api管理',
+        show: true
+      },
+      component: 'SystemApiManger'
     }
   ]
   const json = builder(nav)

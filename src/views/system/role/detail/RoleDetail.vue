@@ -1,20 +1,21 @@
 <template>
-  <a-drawer :visible="visible" @close="close" z-index=99999999 :closable=false width="700">
+  <a-drawer :visible="visible" @close="close" :closable=false width="700">
     <div style="width: 100%;background-color: #00A0E9;height: 280px">
       <div class="role-title">
-        角色111
+        {{ roleInfo.name }}
       </div>
     </div>
     <a-tabs default-active-key="1" size="small" :style="{marginTop:4}">
       <a-tab-pane key="1" tab="模块">
-        <template v-for="i in 20">
+        <template v-for="module in rolePermits.modulePermits">
           <div class="content-body">
             <div style="margin-top: 8px">
-              <a-divider type="vertical"/><span style="font-size: 16px;">模块管理</span>
+              <a-divider type="vertical"/>
+              <span style="font-size: 16px;">{{ module.name }}</span>
             </div>
             <div>
-              <template v-for="i in 20">
-                <a-tag closable>添加{{ i }}</a-tag>
+              <template v-for="content in rolePermits.modulePermits.contentList">
+                <a-tag closable>{{ content.name }}</a-tag>
               </template>
             </div>
           </div>
@@ -23,7 +24,8 @@
       <a-tab-pane key="2" tab="API" force-render>
         <div class="content-body">
           <div>
-            <a-divider type="vertical"/><span style="font-size: 16px;">获取用户</span>
+            <a-divider type="vertical"/>
+            <span style="font-size: 16px;">获取用户</span>
           </div>
           <div style="margin-top: 8px">
             <span>路径: https://localhost:33/api/list</span>
@@ -41,12 +43,30 @@
 </template>
 
 <script>
+import {getRole} from "@/api/system/role";
+import {getMenuPermits} from "@/api/system/module";
+
 export default {
   name: "RoleDetailDrawer",
   data() {
     return {
-      visible: false
+      visible: false,
+      roleId: 0,
+      roleInfo: {},
+      rolePermits: {
+        apiPermits: [],
+        modulePermits: []
+      }
     }
+  },
+  created() {
+    getRole(this.roleId).then(res => {
+      this.roleInfo = res.data;
+    });
+
+    getMenuPermits().then(res => {
+      this.rolePermits.modulePermits = res.data;
+    })
   },
   methods: {
     open() {
@@ -76,7 +96,7 @@ export default {
   margin-top: 8px;
 }
 
-/deep/ .ant-divider, .ant-divider-vertical{
+/deep/ .ant-divider, .ant-divider-vertical {
   width: 4px;
   background-color: #00A0E9;
   margin: 0 8px 0 0;
@@ -89,7 +109,7 @@ export default {
   text-align: center;
 }
 
-.content-body{
+.content-body {
   margin: 0 8px 8px;
 }
 </style>

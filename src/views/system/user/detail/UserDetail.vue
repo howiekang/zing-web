@@ -1,14 +1,19 @@
 <template>
-  <a-drawer :visible="visible" @close="close" :closable=false width="700">
+  <a-drawer :visible="visible" @close="close" :closable=false width="700" destroyOnClose=true>
     <div style="width: 100%;background-color: #00A0E9;height: 280px">
       <div class="user-title">
-        <a-avatar size="large" alt="栋辉" :style="{ backgroundColor: '#f56a00', verticalAlign: 'middle' }"/>角色111
+        <a-avatar
+            size="large"
+            :src="userInfo.headImageUrl"
+            :alt="userInfo.nick"
+            :style="{ backgroundColor: '#f56a00', verticalAlign: 'middle' }"/>
+        {{userInfo.userName}}
       </div>
     </div>
     <a-tabs default-active-key="1" size="small" :style="{marginTop:4}">
       <a-tab-pane key="1" tab="角色">
         <div style="padding: 0 8px">
-          <RoleList />
+          <RoleList :user-info="userInfo"/>
         </div>
       </a-tab-pane>
     </a-tabs>
@@ -20,11 +25,15 @@ import RoleList from "@/views/system/role/list/RoleList";
 
 export default {
   name: "UserDetail",
+  props:["userInfo"],
   components:{RoleList},
   data(){
     return{
       visible:false
     }
+  },
+  created() {
+
   },
   methods: {
     open() {

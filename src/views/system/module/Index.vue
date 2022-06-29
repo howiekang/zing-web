@@ -1,16 +1,16 @@
 <template>
   <page-header-wrapper :content="$t('menu.system.manger.module.page-header-content.desc')">
     <div style="background-color: #ffffff">
-      <DataTable :dataAction="getModuleList" :columns="columns" :custom-row="tableEvent">
+      <DataTable :dataAction="menuPage" :columns="columns" :custom-row="tableEvent">
         <template slot="status" slot-scope="scope">
           <a-badge status="success" v-if="scope.record.status" text="启用"/>
           <a-badge status="error" v-else text="禁用"/>
         </template>
         <template slot="action" slot-scope="scope">
-          <a-button type="link" @click="()=>{editRow(scope.record)}">编辑</a-button>
+          <a-button type="link" @click="()=>{editRow(scope.record)}" v-action:edit>编辑</a-button>
           <a-popconfirm placement="top" ok-text="确定" cancel-text="取消" title="确定删除"
-                        @confirm="()=>{showMsg(removeModule(scope.record.id))}">
-            <a-button type="link">删除</a-button>
+                        @confirm="()=>{showMsg(removeMenu(scope.record.id))}">
+            <a-button type="link" v-action:delete>删除</a-button>
           </a-popconfirm>
         </template>
         <template slot="function" slot-scope="scope">
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import {getModuleList, removeModule} from "@/api/system/module";
+import {menuPage, removeMenu} from "@/api/system/module";
 import {columns} from "@/views/system/module/TableAction";
 import DataTable from "@/views/table/DataTable";
 import ModuleFormIndex from "@/views/system/module/form/Index";
@@ -41,10 +41,10 @@ export default {
   components: {ModuleFormIndex, DataTable},
   data() {
     return {
-      getModuleList,
+      menuPage,
       columns,
       store,
-      removeModule,
+      removeMenu,
       showMsg
     }
   },

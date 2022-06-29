@@ -27,7 +27,7 @@ router.beforeEach((to, from, next) => {
       if (store.getters.roles.length === 0) {
         // request login userInfo
         store
-          .dispatch('GetInfo')
+          .dispatch('GetUserPermissions')
           .then(res => {
             const roles = res.result && res.result.role
             // generate dynamic router

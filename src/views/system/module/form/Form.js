@@ -1,4 +1,4 @@
-import {createModule, updateModule} from "@/api/system/module";
+import {createMenu, updateMenu} from "@/api/system/module";
 import {showMsg} from "@/utils/request";
 
 export const formState = {
@@ -35,11 +35,26 @@ export const formState = {
             ]
         }
     ],
+    parentId: [
+        "parentId",
+        {
+            rules: [
+                {
+                    required: true,
+                    message: '请选择父级模块'
+                }
+            ]
+        }
+    ],
     status: [
         "status",
         {
-            initialValue: true
+            initialValue: true,
+            valuePropName: "checked"
         }
+    ],
+    extendData: [
+        "extendData"
     ]
 }
 
@@ -54,11 +69,10 @@ export function saveForm(form, bindFuncList) {
             values.funcIds = bindFuncList;
             const {id} = values;
             if (id) {
-                showMsg(updateModule(values));
+                showMsg(updateMenu(values));
                 return;
             }
-            showMsg(createModule(values));
-
+            showMsg(createMenu(values));
         }
     });
 }

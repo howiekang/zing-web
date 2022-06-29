@@ -45,6 +45,8 @@ import {
   Descriptions,
   Space,
   Mentions,
+  Empty,
+    TreeSelect,
   message,
   notification,
 } from 'ant-design-vue'
@@ -101,6 +103,8 @@ Vue.use(Statistic)
 Vue.use(Descriptions)
 Vue.use(Space)
 Vue.use(Mentions)
+Vue.use(Empty)
+Vue.use(TreeSelect)
 
 Vue.prototype.$confirm = Modal.confirm
 Vue.prototype.$message = message

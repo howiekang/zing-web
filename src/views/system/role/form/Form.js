@@ -1,11 +1,9 @@
-import {showMsg} from "@/utils/request";
-import {createRole, updateRole} from "@/api/system/role";
-
 export const formState = {
-    id: ["id",{}],
+    id: ["id",{initialValue:null,}],
     name: [
         "name",
         {
+            initialValue:"",
             rules: [
                 {
                     required: true,
@@ -22,24 +20,8 @@ export const formState = {
     status: [
         "status",
         {
-            initialValue: true
+            initialValue: true,
+            valuePropName:"checked"
         }
     ]
-}
-
-/**
- * 表达的保存
- * @param form 表单对象
- */
-export function saveForm(form) {
-    form.validateFields((err, values) => {
-        if (!err) {
-            const {id} = values;
-            if (id) {
-                showMsg(updateRole(values));
-                return;
-            }
-            showMsg(createRole(values))
-        }
-    });
 }

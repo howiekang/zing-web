@@ -3,7 +3,7 @@
     <div id="app">
       <router-view/>
     </div>
-  </a-config-provider>
+  </a-config-provider >
 </template>
 
 <script>

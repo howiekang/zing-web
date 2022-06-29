@@ -10,7 +10,21 @@ const userApi = {
   SendSmsErr: '/account/sms_err',
   // get my info
   UserInfo: '/user/info',
-  UserMenu: '/user/nav'
+  UserMenu: '/user/nav',
+  PhoneLogin: '/login/phone'
+}
+
+/**
+ * 手机登录
+ * @param phone
+ * @returns {*}
+ */
+export function phoneLogin(loginInfo){
+  return request({
+    url: userApi.PhoneLogin,
+    method: 'post',
+    data: loginInfo
+  })
 }
 
 /**

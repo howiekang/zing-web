@@ -3,7 +3,7 @@ import request from "@/utils/request";
 const MODULE_NAME = "function";
 
 const api = {
-    list: '/' + MODULE_NAME + "/list"
+    List: '/' + MODULE_NAME + "/list"
 }
 
 /**
@@ -12,7 +12,7 @@ const api = {
  */
 export function getFunctionList() {
     return request({
-        url: api.list,
+        url: api.List,
         method: 'get'
     })
 }

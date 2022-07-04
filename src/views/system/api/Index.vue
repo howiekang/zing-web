@@ -9,7 +9,7 @@
         <template slot="action" slot-scope="scope">
           <a-button type="link" @click="()=>{editRow(scope.record)}">编辑</a-button>
           <a-popconfirm placement="top" ok-text="确定" cancel-text="取消" title="确定删除"
-                        @confirm="()=>{showMsg(removeApi(scope.record.apiId))}">
+                        @confirm="()=>{deleteMsg(removeApi(scope.record.apiId))}">
             <a-button type="link">删除</a-button>
           </a-popconfirm>
         </template>
@@ -18,7 +18,7 @@
 
     <ApiFormIndex ref="apiForm" />
     <span slot="extraContent">
-      <a-button :style="{backgroundColor:btnColor}" type="primary" size="small" @click="()=>{this.$refs.apiForm.open()}">添加</a-button>
+      <a-button type="primary" size="small" @click="()=>{this.$refs.apiForm.open()}">添加</a-button>
     </span>
   </page-header-wrapper>
 </template>
@@ -27,9 +27,8 @@
 import {columns} from "@/views/system/api/TableAction";
 import {apiPage,removeApi} from "@/api/system/api";
 import DataTable from "@/views/table/DataTable";
-import {showMsg} from "@/utils/request";
 import ApiFormIndex from "@/views/system/api/form/Index";
-import {mapState} from "vuex";
+import {deleteMsg} from "@/utils/form";
 
 export default {
   name: "ApiInfoIndex",
@@ -38,19 +37,14 @@ export default {
     return{
       apiPage,
       removeApi,
-      showMsg,
-      columns
+      columns,
+      deleteMsg
     }
   },
   methods:{
     editRow(record) {
       this.$refs.apiForm.open(record);
     },
-  },
-  computed: {
-    ...mapState({
-      btnColor: state => state.app.color
-    })
   }
 }
 </script>

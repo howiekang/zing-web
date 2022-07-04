@@ -8,7 +8,7 @@
         </template>
         <template slot="action" slot-scope="scope">
           <a-button type="link" @click="()=>{editRow(scope.record)}">编辑</a-button>
-          <a-popconfirm placement="top" ok-text="确定" cancel-text="取消" title="确定删除" @confirm="()=>{showMsg(removeRole(scope.record.id))}">
+          <a-popconfirm placement="top" ok-text="确定" cancel-text="取消" title="确定删除" @confirm="()=>{deleteMsg(removeRole(scope.record.id))}">
             <a-button type="link">删除</a-button>
           </a-popconfirm>
         </template>
@@ -25,8 +25,8 @@
 import {columns} from "@/views/system/role/TableAction";
 import {rolePage,removeRole} from "@/api/system/role";
 import DataTable from "@/views/table/DataTable";
-import {showMsg} from "@/utils/request";
 import RoleFormIndex from "@/views/system/role/form/Index";
+import {deleteMsg} from "@/utils/form";
 
 export default {
   name: "RoleIndex",
@@ -36,7 +36,7 @@ export default {
       rolePage,
       columns,
       removeRole,
-      showMsg
+      deleteMsg
     }
   },
   methods:{

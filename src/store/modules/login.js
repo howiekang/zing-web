@@ -1,4 +1,4 @@
-import {phoneLogin,logout} from "@/api/login";
+import {phoneLogin, logout} from "@/api/login";
 import storage from "store";
 import {ACCESS_TOKEN} from "@/store/mutation-types";
 
@@ -14,21 +14,27 @@ const loginStore = {
   actions: {
     Login({commit}, loginInfo) {
       return new Promise((resolve, reject) => {
-        phoneLogin(loginInfo).then(res=>{
-          const {loginSuccess,failedDesc} = res.data;
-          if (loginSuccess){
+        phoneLogin(loginInfo).then(res => {
+          const {loginSuccess, failedDesc, extendData} = res.data;
+          if (loginSuccess) {
+            const {token} = JSON.parse(extendData);
+            console.log("token",token)
+            if (token) {
+              storage.set(ACCESS_TOKEN, token)
+            }
+
             resolve()
-          }else {
+          } else {
             reject(failedDesc)
           }
-        }).catch(error=>{
+        }).catch(error => {
           reject(error)
         })
       });
     },
 
     // 登出
-    Logout ({ commit, state }) {
+    Logout({commit, state}) {
       return new Promise((resolve) => {
         logout(state.token).then(() => {
           commit('SET_TOKEN', '')

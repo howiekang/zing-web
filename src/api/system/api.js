@@ -6,8 +6,7 @@ const api = {
     remove: '/api' + PUBLIC_API_PATH.delete,
     info: '/api' + PUBLIC_API_PATH.info,
     page: '/api' + PUBLIC_API_PATH.page,
-    apiPermits: '/api/permits',
-    apiPermitsType: '/api/permits/type'
+    apiPermits: '/api/permits'
 }
 
 /**
@@ -88,17 +87,6 @@ export function updateApi(parameter) {
 export function getApiPermits() {
     return request({
         url: api.apiPermits,
-        method: 'get'
-    })
-}
-
-/**
- * 获取全部的api权限类型
- * @returns {*}
- */
-export function getApiPermitsType() {
-    return request({
-        url: api.apiPermitsType,
         method: 'get'
     })
 }

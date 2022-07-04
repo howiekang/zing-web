@@ -9,20 +9,29 @@
         <template slot="action" slot-scope="scope">
           <a-button type="link" @click="()=>{editRow(scope.record)}" v-action:edit>编辑</a-button>
           <a-popconfirm placement="top" ok-text="确定" cancel-text="取消" title="确定删除"
-                        @confirm="()=>{showMsg(removeMenu(scope.record.id))}">
+                        @confirm="()=>{deleteMsg(removeMenu(scope.record.id))}">
             <a-button type="link" v-action:delete>删除</a-button>
           </a-popconfirm>
         </template>
-        <template slot="function" slot-scope="scope">
-          <template v-if="scope.record.functionRests" v-for="func in scope.record.functionRests">
-            <a-tag>{{ func.funcName }}</a-tag>
-          </template>
-        </template>
       </DataTable>
-      <ModuleFormIndex ref="from"/>
+      <MenuFormIndex ref="from"/>
+      <MenuPermits ref="menuPermits"/>
     </div>
     <span slot="extraContent">
-      <a-button :style="{backgroundColor:btnColor}" type="primary" size="small" @click="()=>{this.$refs.from.open()}">添加</a-button>
+      <a-space>
+        <a-button
+            type="primary"
+            size="small"
+            @click="()=>{this.$refs.from.open()}">
+          添加
+        </a-button>
+        <a-button
+            type="primary"
+            size="small"
+            @click="()=>{this.$refs.menuPermits.open()}">
+          权限分配
+        </a-button>
+      </a-space>
     </span>
   </page-header-wrapper>
 </template>
@@ -31,21 +40,21 @@
 import {menuPage, removeMenu} from "@/api/system/module";
 import {columns} from "@/views/system/module/TableAction";
 import DataTable from "@/views/table/DataTable";
-import ModuleFormIndex from "@/views/system/module/form/Index";
+import MenuFormIndex from "@/views/system/module/form/Index";
 import store from "@/store";
-import {showMsg} from "@/utils/request";
-import { mapState } from 'vuex';
+import {deleteMsg} from "@/utils/form";
+import MenuPermits from "@/views/system/module/permits/MenuPermits";
 
 export default {
   name: "ModuleIndex",
-  components: {ModuleFormIndex, DataTable},
+  components: {MenuPermits, MenuFormIndex, DataTable},
   data() {
     return {
       menuPage,
       columns,
       store,
       removeMenu,
-      showMsg
+      deleteMsg
     }
   },
   methods: {
@@ -61,11 +70,6 @@ export default {
         }
       }
     }
-  },
-  computed: {
-    ...mapState({
-      btnColor: state => state.app.color
-    })
   }
 }
 </script>

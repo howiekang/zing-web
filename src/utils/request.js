@@ -5,7 +5,6 @@ import notification from 'ant-design-vue/es/notification'
 import {VueAxios} from './axios'
 import {ACCESS_TOKEN} from '@/store/mutation-types'
 import {message} from "ant-design-vue";
-import {boolean} from "mockjs2/src/mock/random/basic";
 
 // 创建 axios 实例
 const request = axios.create({
@@ -52,15 +51,6 @@ request.interceptors.request.use(config => {
     config.headers['Authorization'] = token
   }
   return config
-}, errorHandler)
-
-// response token interceptor
-request.interceptors.response.use((response) => {
-  const {headers: {authorization}} = response
-  if (authorization) {
-      storage.set(ACCESS_TOKEN,authorization)
-  }
-  return response
 }, errorHandler)
 
 // response interceptor
@@ -117,48 +107,4 @@ function responseProcess(response) {
     }
   }
   return response.data;
-}
-
-/**
- * 响应结果展示
- * @param reqAction
- */
-export function showMsg(reqAction) {
-  reqAction.then(resp => {
-    const {code, data, msg} = resp;
-    if (code !== RESULT_CODE.success) {
-      return;
-    }
-
-    if (data && data instanceof boolean) {
-      if (msg) {
-        message.info(msg);
-        return;
-      }
-
-      if (data) {
-        message.info("成功");
-      } else {
-        message.warning("失败");
-      }
-      return;
-    }
-    if (msg) {
-      message.info(msg);
-    }
-  }).catch(err => {
-    message.error(err);
-  });
-}
-
-/**
- * 获取返回的Data
- * @param reqAction
- * @returns {Promise<*>}
- */
-export async function convertResponse(reqAction) {
-  return await reqAction.then(resp => {
-    console.log("data resp", resp.data)
-    return resp.data;
-  });
 }

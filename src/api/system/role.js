@@ -6,7 +6,7 @@ const api = {
     remove: '/role' + PUBLIC_API_PATH.delete,
     info: '/role' + PUBLIC_API_PATH.info,
     page: '/role' + PUBLIC_API_PATH.page,
-    rolePermits: '/role/permits'
+    RolePermits: '/role/permits'
 }
 
 /**
@@ -87,7 +87,7 @@ export function updateRole(parameter) {
  */
 export function getRolePermits(roleId){
     return request({
-        url: api.rolePermits,
+        url: api.RolePermits,
         method: 'get',
         params: {roleId}
     })

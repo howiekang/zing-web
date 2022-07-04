@@ -3,16 +3,16 @@ import request, {PUBLIC_API_PATH} from "@/utils/request";
 const MODULE_NAME = "menu";
 
 const api = {
-    update: '/' + MODULE_NAME + PUBLIC_API_PATH.update,
-    create: '/' + MODULE_NAME + PUBLIC_API_PATH.create,
-    remove: '/' + MODULE_NAME + PUBLIC_API_PATH.delete,
-    info: '/' + MODULE_NAME + PUBLIC_API_PATH.info,
-    page: '/' + MODULE_NAME + PUBLIC_API_PATH.page,
-    modulePermits: '/' + MODULE_NAME + "/permits",
-    bindPermitsIds: '/' + MODULE_NAME + "/bind/permits/ids",
-    topLevelModuleList: '/' + MODULE_NAME + "/top-level/list",
-    childrenList: '/' + MODULE_NAME + "/children/list",
-    menuList: '/' + MODULE_NAME + "/menu/list"
+  update: '/' + MODULE_NAME + PUBLIC_API_PATH.update,
+  Create: '/' + MODULE_NAME + PUBLIC_API_PATH.create,
+  remove: '/' + MODULE_NAME + PUBLIC_API_PATH.delete,
+  info: '/' + MODULE_NAME + PUBLIC_API_PATH.info,
+  page: '/' + MODULE_NAME + PUBLIC_API_PATH.page,
+  MenuPermits: '/' + MODULE_NAME + "/permits",
+  BindPermitsIds: '/' + MODULE_NAME + "/bind/permits/ids",
+  TopLevelMenuList: '/' + MODULE_NAME + "/top-level/list",
+  SubList: '/' + MODULE_NAME + "/sub/list",
+  MenuList: '/' + MODULE_NAME + "/menu/list"
 }
 
 /**
@@ -21,14 +21,14 @@ const api = {
  * @returns {*}
  */
 export function createMenu(parameter) {
-    return request({
-        url: api.create,
-        method: 'post',
-        data: parameter,
-        headers: {
-            'Content-Type': 'application/json;charset=UTF-8'
-        }
-    })
+  return request({
+    url: api.Create,
+    method: 'post',
+    data: parameter,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  })
 }
 
 /**
@@ -37,11 +37,11 @@ export function createMenu(parameter) {
  * @returns {*}
  */
 export function getMenu(parameter) {
-    return request({
-        url: api.info,
-        method: 'get',
-        params: {id: parameter}
-    })
+  return request({
+    url: api.info,
+    method: 'get',
+    params: {id: parameter}
+  })
 }
 
 /**
@@ -50,14 +50,14 @@ export function getMenu(parameter) {
  * @returns {*}
  */
 export function menuPage(parameter) {
-    return request({
-        url: api.page,
-        method: 'post',
-        data: parameter,
-        headers: {
-            'Content-Type': 'application/json;charset=UTF-8'
-        }
-    })
+  return request({
+    url: api.page,
+    method: 'post',
+    data: parameter,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  })
 }
 
 /**
@@ -66,11 +66,11 @@ export function menuPage(parameter) {
  * @returns {*}
  */
 export function removeMenu(parameter) {
-    return request({
-        url: api.remove,
-        method: 'post',
-        params: {id: parameter}
-    })
+  return request({
+    url: api.remove,
+    method: 'post',
+    params: {id: parameter}
+  })
 }
 
 /**
@@ -79,11 +79,11 @@ export function removeMenu(parameter) {
  * @returns {*}
  */
 export function updateMenu(parameter) {
-    return request({
-        url: api.update,
-        method: 'post',
-        data: parameter
-    })
+  return request({
+    url: api.update,
+    method: 'post',
+    data: parameter
+  })
 }
 
 /**
@@ -91,10 +91,10 @@ export function updateMenu(parameter) {
  * @returns {*}
  */
 export function getMenuPermits() {
-    return request({
-        url: api.modulePermits,
-        method: 'get',
-    })
+  return request({
+    url: api.MenuPermits,
+    method: 'get',
+  })
 }
 
 /**
@@ -103,11 +103,11 @@ export function getMenuPermits() {
  * @returns {*}
  */
 export function getBindPermitsIds(moduleId) {
-    return request({
-        url: api.bindPermitsIds,
-        method: 'get',
-        params: {moduleId}
-    })
+  return request({
+    url: api.BindPermitsIds,
+    method: 'get',
+    params: {moduleId}
+  })
 }
 
 /**
@@ -115,22 +115,22 @@ export function getBindPermitsIds(moduleId) {
  * @returns {*}
  */
 export function getTopLevelMenuList() {
-    return request({
-        url: api.topLevelModuleList,
-        method: 'get'
-    })
+  return request({
+    url: api.TopLevelMenuList,
+    method: 'get'
+  })
 }
 
 /**
- * 获取顶级的模块列表
+ * 获取子模块列表
  * @returns {*}
  */
-export function getChildrenList(moduleId) {
-    return request({
-        url: api.childrenList,
-        method: 'get',
-        params:{moduleId}
-    })
+export function getSubList(searchDesc) {
+  return request({
+    url: api.SubList,
+    method: 'post',
+    data: searchDesc
+  })
 }
 
 /**
@@ -138,8 +138,8 @@ export function getChildrenList(moduleId) {
  * @returns {*}
  */
 export function getMenuList() {
-    return request({
-        url: api.menuList,
-        method: 'get'
-    })
+  return request({
+    url: api.MenuList,
+    method: 'get'
+  })
 }

@@ -99,16 +99,3 @@ export const getPageParam = (parameter) => {
         size: parameter.pageSize, current: parameter.current
     }
 }
-
-/**
- * 获取分页的结果
- * @param result
- * @returns {*&{pageNo, totalCount}}
- */
-export function getPageResult(result) {
-    const {current, size, total} = result;
-
-    if (current && total) {
-        return {pageNo: current, totalCount: total, ...result}
-    }
-}

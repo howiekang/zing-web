@@ -16,7 +16,7 @@ export const formState = {
             ]
         }
     ],
-    permitsTypes: ["permitsTypes", {}],
+    permitsIds: ["permitsIds", {}],
     apiUrl: [
         "apiUrl",
         {

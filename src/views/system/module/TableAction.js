@@ -8,9 +8,8 @@ export const columns = [
         dataIndex: 'path'
     },
     {
-        title: "功能",
-        dataIndex: 'function',
-        scopedSlots: {customRender: 'function'}
+        title: "图标",
+        dataIndex: 'icon'
     },
     {
         title: "状态",

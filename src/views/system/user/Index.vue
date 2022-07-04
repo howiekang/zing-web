@@ -31,7 +31,7 @@ export default {
     }
   },
   methods: {
-    tableEvent(){
+    tableEvent(record){
       return {
         on: {
           click: (event) => {

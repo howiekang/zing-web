@@ -1,30 +1,21 @@
 <template>
-  <a-drawer
+  <a-modal
       :visible="visible"
-      width=380
-      :closable=false
-      @close="close">
-    <template slot="title">
-      <div class="title">{{ $t('module.create.desc') }}</div>
-      <a-space>
-        <a-button type="primary" @click="()=>{saveForm(this.form,bindFuncIds)}">
-          {{ $t('save') }}
-        </a-button>
-        <a-button type="danger" @click="close">{{ $t('cancel') }}</a-button>
-      </a-space>
-    </template>
+      @ok="(e)=>{saveForm(this.form,this.bindPermitsIds)}"
+      @cancel="close"
+      :closable="false">
     <div>
       <div style="margin-top: 8px">
         <a-divider type="vertical"/>
         基础
       </div>
-      <div style="padding: 0 8px;width: 380px;">
+      <div>
         <a-form
             :form="form"
             name="module_from"
             labelAlign="right"
-            :label-col="{ span: 5 }"
-            :wrapper-col="{ span: 19 }"
+            :label-col="{ span: 4 }"
+            :wrapper-col="{ span: 20 }"
         >
           <a-form-item hidden="true">
             <a-input v-decorator="formState.id"/>
@@ -36,14 +27,18 @@
             <a-tree-select
                 v-decorator="formState.parentId"
                 tree-data-simple-mode
-                :tree-data="moduleTreeData"
+                :tree-data="menuTreeData"
                 placeholder="选择父级模块"
-                :load-data="loadModule"
-                :treeIcon=true
+                :load-data="loadMenuTree"
+                :showSearch=true
+                @search="menuTreeSearch"
             />
           </a-form-item>
           <a-form-item label="路径">
             <a-input v-decorator="formState.path"/>
+          </a-form-item>
+          <a-form-item label="代码" v-if="!isUpdate">
+            <a-input v-decorator="formState.code"/>
           </a-form-item>
           <a-form-item label="状态">
             <a-switch v-decorator="formState.status" checked-children="启用" un-checked-children="禁用"/>
@@ -62,33 +57,43 @@
       <div style="margin: 8px 0;padding: 0 8px;">
         <a-empty :description="false" v-if="funcList.length === 0"/>
         <template v-for="func in funcList">
-          <a-checkbox :checked="bindFuncIds.indexOf(func.funId) >= 0" @change="(e)=>{funcChange(e,func.funId)}">
-            {{ func.funcName }}
+          <a-checkbox :checked="bindPermitsIds.indexOf(func.funId) >= 0" @change="(e)=>{permitsChange(e,func.funId)}">
+            {{ func.name }}
           </a-checkbox>
         </template>
       </div>
     </div>
-  </a-drawer>
+  </a-modal>
 </template>
 
 <script>
 import {formState, saveForm} from "@/views/system/module/form/Form.js";
-import FunctionListIndex from "@/views/system/function/Index";
 import {getFunctionList} from "@/api/system/function";
-import {getBindPermitsIds, getChildrenList, getTopLevelMenuList} from "@/api/system/module";
+import {getBindPermitsIds, getSubList, getTopLevelMenuList} from "@/api/system/module";
+
+const TOP_MENU = {
+  id: "0",
+  pId: -1,
+  value: "0",
+  title: "根菜单"
+}
 
 export default {
-  name: "ModuleFormIndex",
-  components: {FunctionListIndex},
+  name: "MenuFormIndex",
   data() {
     return {
       visible: false,
       form: {},
       formState: formState,
       funcList: [],
-      bindFuncIds: [],
+      bindPermitsIds: [],
       saveForm,
-      moduleTreeData: [],
+      menuTreeData: [TOP_MENU],
+      isUpdate: false,
+      menuTreeState: {
+        menuId: 0,
+        searchDesc: ''
+      }
     }
   },
   created() {
@@ -99,21 +104,23 @@ export default {
   },
   methods: {
     initValues() {
-      this.bindFuncIds = [];
-      this.moduleTreeData = [];
+      this.bindPermitsIds = []
+      this.menuTreeData = [TOP_MENU]
+      this.isUpdate = false
     },
     open(record) {
       this.initValues();
       this.visible = true;
 
       getTopLevelMenuList().then(res => {
-        this.refreshModuleTree(res.data)
+        this.refreshMenuTree(res.data)
       });
 
       if (record) {
+        this.isUpdate = true;
         getBindPermitsIds(record.id).then(res => {
           if (res.data) {
-            this.bindFuncIds = res.data;
+            this.bindPermitsIds = res.data;
           }
         });
 
@@ -121,7 +128,9 @@ export default {
           this.form.setFieldsValue({
             id: record.id,
             name: record.name,
+            parentId: record.parentId,
             path: record.path,
+            code: record.code,
             status: record.status,
             icon: record.icon,
             extendData: record.extendData,
@@ -129,42 +138,59 @@ export default {
         })
       }
     },
-    refreshModuleTree(moduleData) {
-      if (moduleData) {
-        for (let item of moduleData) {
-          this.moduleTreeData.push({
-            id: item.id,
-            pId: item.parentId,
-            value: item.id,
-            title: item.name
-          });
-        }
+    refreshMenuTree(menuData) {
+      if (!menuData) {
+        return
+      }
+
+      for (const menu of menuData) {
+        this.menuTreeData.push({
+          id: menu.id,
+          pId: menu.parentId,
+          value: menu.id,
+          title: menu.name
+        });
       }
     },
-    loadModule(treeModule) {
+    loadMenuTree(treeMenu) {
       return new Promise(resolve => {
-        const {id} = treeModule.dataRef;
-        getChildrenList(id).then(res => {
-          this.refreshModuleTree(res.data)
-          resolve();
-        })
+        const {id} = treeMenu.dataRef;
+        if (id === TOP_MENU.id) {
+          resolve()
+          return
+        }
+
+        this.menuTreeState.menuId = id
+        this.refreshSubMenuList(resolve)
       });
+    },
+    refreshSubMenuList(callback) {
+      getSubList(this.menuTreeState).then(res => {
+        this.refreshMenuTree(res.data)
+        callback && callback()
+      })
     },
     close() {
       this.visible = false;
     },
-    funcChange(e, funcId) {
+    permitsChange(e, funcId) {
       const {checked} = e.target;
       if (checked) {
-        this.bindFuncIds.push(funcId);
+        this.bindPermitsIds.push(funcId);
         return
       }
 
-      this.bindFuncIds.forEach((item, index, arr) => {
+      this.bindPermitsIds.forEach((item, index, arr) => {
         if (item === funcId) {
           arr.splice(index, 1);
         }
       })
+    },
+    menuTreeSearch(value) {
+      this.menuTreeState.menuId = null
+      this.menuTreeState.searchDesc = value
+      this.menuTreeData = []
+      this.refreshSubMenuList()
     }
   }
 }

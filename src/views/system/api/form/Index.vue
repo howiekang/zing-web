@@ -1,6 +1,6 @@
 <template>
   <a-modal v-model="visible" title="Api管理" @ok="saveForm">
-    <slot name="contentWrapper" />
+    <slot name="contentWrapper"/>
     <a-form
         :form="form"
         labelAlign="right"
@@ -13,11 +13,11 @@
       <a-form-item label="名字">
         <a-input v-decorator="formState.name"/>
       </a-form-item>
-      <a-form-item label="权限" >
-        <a-select v-decorator="formState.permitsTypes" mode="multiple">
-          <template v-for="(item,index) in apiPermitsType">
-            <a-select-option :value="item">
-              {{item}}
+      <a-form-item label="权限">
+        <a-select v-decorator="formState.permitsIds" mode="multiple">
+          <template v-for="(item,index) in functionList">
+            <a-select-option :value="item.funId">
+              {{ item.name }}
             </a-select-option>
           </template>
         </a-select>
@@ -34,53 +34,63 @@
 
 <script>
 import {formState} from "@/views/system/api/form/form";
-import {getApiPermitsType} from "@/api/system/api";
-import {showMsg} from "@/utils/request";
 import {createApi, updateApi} from "@/api/system/api";
+import {getFunctionList} from "@/api/system/function";
+import {updateMsg} from "@/utils/form";
 
 export default {
   name: "ApiFormIndex",
-  data(){
+  data() {
     return {
-      visible:false,
-      form:{},
+      visible: false,
+      form: {},
       formState,
-      apiPermitsType:[]
+      functionList: []
     }
   },
   created() {
     this.form = this.$form.createForm(this, {name: 'api_form'});
+    getFunctionList().then(res => {
+      this.functionList = res.data;
+    });
   },
-  methods:{
+  methods: {
     open(record) {
       this.visible = true;
 
-      getApiPermitsType().then(res=>{
-        this.apiPermitsType = res.data;
-      });
+      const {contentList} = record
+      const permitsIds = []
+      if (contentList) {
+        for (const content of contentList) {
+          permitsIds.push(content.funId)
+        }
+      }
+
       this.$nextTick(() => {
         this.form.setFieldsValue({
-          apiId:record.apiId,
-          name:record.name,
-          apiUrl:record.apiUrl,
-          permitsTypes:record.permitsTypes,
-          status:record.status,
+          apiId: record.apiId,
+          name: record.name,
+          apiUrl: record.apiUrl,
+          permitsIds: permitsIds,
+          status: record.status,
         });
       })
     },
     close() {
       this.visible = false;
     },
-    saveForm(e){
+    saveForm(e) {
       this.form.validateFields((err, values) => {
-        if (!err) {
-          const {apiId} = values;
-          if (apiId) {
-            showMsg(updateApi(values));
-            return;
-          }
-          showMsg(createApi(values));
+        if (err) {
+          return
         }
+
+        const {apiId} = values;
+        if (apiId) {
+          updateMsg("Api", updateApi(values),()=>{this.close()});
+          return;
+        }
+        createApi("Api", createApi(values),()=>{this.close()});
       });
     }
   }

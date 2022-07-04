@@ -1,8 +1,8 @@
 import request from "@/utils/request";
 
 const api = {
-  userPage: '/user/page',
-  getUserBindRoles: '/user/bind/info',
+  UserPage: '/user/page',
+  BindInfo: '/user/bind/role/info',
   bindRole: '/user/bind/role',
   unBindRole: '/user/unbind/role',
   UserInfo: '/user/info',
@@ -17,7 +17,7 @@ const api = {
  */
 export function userPage(parameter) {
   return request({
-    url: api.userPage,
+    url: api.UserPage,
     method: 'post',
     data: parameter,
     headers: {
@@ -31,9 +31,9 @@ export function userPage(parameter) {
  * @param userId
  * @returns {*}
  */
-export function getUserBindRoles(userId) {
+export function getBindRoles(userId) {
   return request({
-    url: api.getUserBindRoles,
+    url: api.BindInfo,
     method: 'get',
     params: {userId}
   })

@@ -386,6 +386,10 @@ export const asyncRouterMap = [
  */
 export const constantRouterMap = [
   {
+    path: '/index',
+    component: () => import(/* webpackChunkName: "fail" */ '@/views/dashboard/Workplace')
+  },
+  {
     path: '/login',
     name: 'login',
     component: () => import(/* webpackChunkName: "user" */ '@/views/user/Login')

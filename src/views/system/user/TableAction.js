@@ -21,6 +21,11 @@ export const columns = [
         dataIndex: 'email'
     },
     {
+        title: "类型",
+        dataIndex: 'userType',
+        scopedSlots: {customRender: 'userType'}
+    },
+    {
         title: "状态",
         dataIndex: 'status',
         scopedSlots: {customRender: 'status'}

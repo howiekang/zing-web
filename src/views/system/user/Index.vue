@@ -5,6 +5,11 @@
         <span slot="avatar" slot-scope="text, record, index">
           <a-avatar :src="text"/>
         </span>
+        <template slot="userType" slot-scope="scope">
+          <a-tag v-for="userType in scope.record.userTypes">
+            {{userType.desc}}
+          </a-tag>
+        </template>
         <template slot="status" slot-scope="scope">
           <a-badge status="success" v-if="scope.record.status" text="启用"/>
           <a-badge status="error" v-else text="禁用"/>

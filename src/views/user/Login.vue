@@ -75,7 +75,7 @@
 
 import {mapActions} from "vuex";
 import {getLoginCode} from "@/api/system/code";
-import Router from "vue-router";
+import Router from "@/router";
 
 export default {
   data() {
@@ -135,7 +135,7 @@ export default {
       })
     },
     loginSuccess() {
-      Router.prototype.push("/system/manger/module")
+      Router.push("/index")
     }
   }
 }

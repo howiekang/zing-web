@@ -55,7 +55,8 @@ const constantRouterComponents = {
   SystemUserManger: () => import('@/views/system/user/Index'),
   SystemModuleManger: () => import('@/views/system/module/Index'),
   SystemRoleManger: () => import('@/views/system/role/Index'),
-  SystemApiManger: () => import('@/views/system/api/Index')
+  SystemApiManger: () => import('@/views/system/api/Index'),
+  SystemFunctionManger: () => import('@/views/system/function/Index')
   // 'TestWork': () => import(/* webpackChunkName: "TestWork" */ '@/views/dashboard/TestWork')
 }
 
@@ -186,15 +187,11 @@ const listToTree = (list, tree, parentId) => {
 const dataToStandMenuList = (data) => {
   let result = [];
   for (let item of data) {
-    const {extendData} = item;
-    if (extendData) {
-      let extendDataJson = JSON.parse(extendData);
-      result.push({
-        name: extendDataJson.component, path: item.path, parentId: item.parentId, id: item.id, meta: {
-          title: item.name, show: true
-        }, component: extendDataJson.component
-      })
-    }
+    result.push({
+      name: item.code, path: item.path, parentId: item.parentId, id: item.id, meta: {
+        title: item.name, show: true
+      }, component: item.code
+    })
   }
   return result
 }

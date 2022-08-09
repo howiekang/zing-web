@@ -7,7 +7,10 @@ const api = {
   unBindRole: '/user/unbind/role',
   UserInfo: '/user/info',
   OnlineUserInfo: '/user/online/info',
-  UserPermissions: '/user/permissions'
+  UserPermissions: '/user/permissions',
+  AddType: '/user/add/type',
+  RemoveType: '/user/remove/type',
+  UserTypeList: '/user/type/list',
 }
 
 /**
@@ -102,9 +105,48 @@ export function getOnlineUserInfo() {
  * 获取用户的权限信息
  * @returns {*}
  */
-export function getUserPermissions(){
+export function getUserPermissions() {
   return request({
     url: api.UserPermissions,
     method: 'get'
+  })
+}
+
+/**
+ * 添加用户类型
+ * @param userId
+ * @param typeFlag
+ * @returns {*}
+ */
+export function addType(userId, typeFlag) {
+  return request({
+    url: api.AddType,
+    method: 'post',
+    data: {userId, typeFlag}
+  })
+}
+
+/**
+ * 移除用户类型
+ * @param userId
+ * @param typeFlag
+ * @returns {*}
+ */
+export function removeType(userId, typeFlag) {
+  return request({
+    url: api.RemoveType,
+    method: 'post',
+    data: {userId, typeFlag}
+  })
+}
+
+/**
+ * 用户的类型列表
+ * @returns {*}
+ */
+export function userTypeList() {
+  return request({
+    url: api.UserTypeList,
+    method: 'post'
   })
 }

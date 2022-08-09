@@ -6,8 +6,10 @@
           <a-avatar :src="text"/>
         </span>
         <template slot="userType" slot-scope="scope">
-          <a-tag v-for="userType in scope.record.userTypes">
-            {{userType.desc}}
+          <a-tag
+              closable @close="(e)=>{userTypeRemove(scope.record,userType.type)}"
+              v-for="userType in scope.record.userTypes">
+            {{ userType.desc }}
           </a-tag>
         </template>
         <template slot="status" slot-scope="scope">
@@ -22,9 +24,10 @@
 
 <script>
 import DataTable from "@/views/table/DataTable";
-import {userPage} from "@/api/system/user";
+import {removeType, userPage} from "@/api/system/user";
 import {columns} from "@/views/system/user/TableAction";
 import UserDetail from "@/views/system/user/detail/UserDetail";
+import {updateMsg} from "@/utils/form";
 
 export default {
   name: "UserIndex",
@@ -36,7 +39,7 @@ export default {
     }
   },
   methods: {
-    tableEvent(record){
+    tableEvent(record) {
       return {
         on: {
           click: (event) => {
@@ -44,6 +47,10 @@ export default {
           }
         }
       }
+    },
+    userTypeRemove(userInfo, typeFlag) {
+      const {id} = userInfo
+      updateMsg("用户类型", removeType(id, typeFlag))
     }
   }
 }
